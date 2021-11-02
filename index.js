@@ -2,6 +2,7 @@ class user1 {
     constructor(firstName, lastName) {
       this.firstName = firstName;
       this.lastName = lastName;
+      this.input = input;
     }
     details() 
     { return this.firstName + " " + this.lastName;
