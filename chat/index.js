@@ -30,6 +30,21 @@ class sender {
     }
   }
 
+     // class for message
+     class message{
+      constructor(userName, messageId, timeStamp, input) {
+        this.userName = userName;
+        this.messageId = messageId;
+        this.timeStamp = timeStamp
+        this.input = input;
+      }
+      directmessage() 
+      { return this.username + " : " + this.input + " " + this.timeStamp;
+      }
+      
+    }
+  
+
 
   // Function for the time stamp
 
