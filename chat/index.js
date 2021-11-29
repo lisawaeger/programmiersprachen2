@@ -1,51 +1,78 @@
 // class for sender
-class sender {
-    constructor(firstName, lastName,profilpicture, input) {
-      this.firstName = firstName;
-      this.lastName = lastName;
-      this.profilpicture = profilpicture
-      this.input = input;
-    }
-    details() 
-    { return this.firstName + " " + this.lastName;
-    }
-    fullname() {
-      return this.firstName + this.lastName;
-    }
+class user {
+  constructor(firstName, lastName, profilpicture, userID) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.profilpicture = profilpicture;
+    this.userID = userID;
   }
-
-    // class for receiver
-  class receiver {
-    constructor(firstName, lastName,profilpicture, input) {
-      this.firstName = firstName;
-      this.lastName = lastName;
-      this.profilpicture = profilpicture
-      this.input = input;
-    }
-    details() 
-    { return this.firstName + " " + this.lastName;
-    }
-    fullname() {
-      return this.firstName + this.lastName;
-    }
+  getDetails() {
+    return this.profilpicture + " " + this.userID + " " + this.firstName + " " + this.lastName;
   }
+}
 
-
+// class for message
+class message extends user {
+  constructor(firstName, lastName,input, time) {
+    super(firstName,lastName);
+    this.input = input;
+    this.time = time;
+  }
   // Function for the time stamp
-
-  function getTime() {
+  getTime() {
     let today = new Date();
     hours = today.getHours();
     minutes = today.getMinutes();
 
     if (hours < 10) {
-        hours = "0" + hours;
+      hours = "0" + hours;
     }
 
     if (minutes < 10) {
-        minutes = "0" + minutes;
+      minutes = "0" + minutes;
     }
     let time = hours + ":" + minutes;
     return time;
+  }
+  //Function for text
+  getInput() {
+    return this.firstName + this.lastName + this.getTime() + this.input;
+  }
 }
 
+//class for chat
+class chat extends message {
+  constructor(input, time, history, chatID) {
+    super(input, time);
+    this.history = history;
+    this.chatID = chatID;
+  }
+  getChat() {
+    return this.getInput() + this.chatID;
+  }
+}
+
+
+// class for Two Person Chat
+class twoPersonChat extends chat, user {
+  constructor(firstName, lastName, profilpicture, userID, input, time, history, chatID, status) {
+    super(firstName, lastName, profilpicture, userID,input, time, history, chatID);
+    this.status = status;
+  }
+  gettwoPersonChat (){
+return this.getDetails() + this.getChat() + this.status;
+  }
+}
+
+
+// class for Groupchat
+class groupChat extends chat {
+  constructor(input, time, history, chatID, groupName, groupImage){
+    super(input, time, history, chatID)
+    this.groupName = groupName;
+    this.groupImage = groupImage;
+  }
+  getgroupChat(){
+   return this.getChat() + this.groupName + this.groupImage
+  }
+}
