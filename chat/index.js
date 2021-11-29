@@ -65,7 +65,8 @@ class chat extends message {
     this.history = history;
     this.chatID = chatID;
   }
-  getChat() {
+  //create chat
+  putChat() {
     return this.getInput() + this.history + this.chatID;
   }
 }
@@ -77,7 +78,8 @@ class twoPersonChat extends chat, user {
     super(firstName, lastName, profilpicture, userID,input, time, history, chatID);
     this.status = status;
   }
-  gettwoPersonChat (){
+  //create twoPersonChat
+  puttwoPersonChat (){
 return this.getDetails() + this.getChat() + this.status;
   }
 }
@@ -90,7 +92,8 @@ class groupChat extends chat {
     this.groupName = groupName;
     this.groupImage = groupImage;
   }
-  getgroupChat(){
+  //create groupChat 
+  putgroupChat(){
    return this.getChat() + this.groupName + this.groupImage
   }
 }
