@@ -1,3 +1,20 @@
+const socket = io('ws://localhost:8080');
+
+socket.on('message', text => {
+
+    const li = document.createElement('li');
+    li.innerHTML = text;
+    document.querySelector('ul').appendChild(el)
+
+});
+
+document.querySelector('button').onclick = () => {
+
+    const text = document.querySelector('input').value;
+    socket.emit('message', text)
+    
+}
+
 // class for sender
 class user {
   constructor(firstName, lastName, profilpicture, userID) {
@@ -34,7 +51,8 @@ class message extends user {
     let time = hours + ":" + minutes;
     return time;
   }
-  //Function for text
+
+  //Function for message input
   getInput() {
     return this.firstName + this.lastName + this.getTime() + this.input;
   }
