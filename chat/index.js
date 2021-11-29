@@ -10,7 +10,6 @@ class user {
     return this.profilpicture + " " + this.userID + " " + this.firstName + " " + this.lastName;
   }
 }
-
 // class for message
 class message extends user {
   constructor(firstName, lastName,input, time) {
@@ -18,6 +17,7 @@ class message extends user {
     this.input = input;
     this.time = time;
   }
+  
   // Function for the time stamp
   getTime() {
     let today = new Date();
@@ -48,7 +48,7 @@ class chat extends message {
     this.chatID = chatID;
   }
   getChat() {
-    return this.getInput() + this.chatID;
+    return this.getInput() + this.history + this.chatID;
   }
 }
 
