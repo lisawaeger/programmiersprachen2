@@ -1,10 +1,27 @@
+const http = require('http').createServer();
+
+const io = require('socket.io')(http, {
+    cors: { origin: "*" }
+});
+
+io.on('connection', (socket) => {
+    console.log('a user connected');
+
+    socket.on('message', (message) =>     {
+        console.log(message);
+        io.emit('message', `${socket.id.substr(0,2)} said ${message}` );   
+    });
+});
+
+http.listen(8080, () => console.log('listening on http://localhost:8080') );
+
 const socket = io('ws://localhost:8080');
 
 socket.on('message', text => {
 
     const li = document.createElement('li');
     li.innerHTML = text;
-    document.querySelector('ul').appendChild(el)
+    document.querySelector('ul').appendChild(li)
 
 });
 
@@ -66,7 +83,7 @@ class chat extends message {
     this.chatID = chatID;
   }
   //create chat
-  putChat() {
+  getChat() {
     return this.getInput() + this.history + this.chatID;
   }
 }
@@ -79,7 +96,7 @@ class twoPersonChat extends chat, user {
     this.status = status;
   }
   //create twoPersonChat
-  puttwoPersonChat (){
+  gettwoPersonChat (){
 return this.getDetails() + this.getChat() + this.status;
   }
 }
@@ -93,7 +110,7 @@ class groupChat extends chat {
     this.groupImage = groupImage;
   }
   //create groupChat 
-  putgroupChat(){
+  getgroupChat(){
    return this.getChat() + this.groupName + this.groupImage
   }
 }
