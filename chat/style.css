@@ -1,13 +1,6 @@
-/* Chat containers */
-.container {
-    border: 2px solid #dedede;
-    background-color: #f1f1f1;
-    border-radius: 5px;
-    padding: 10px;
-    margin: 10px 0;
-  }
-  
-  /* Darker chat container */
+
+/*  
+ Darker chat container
   .darker {
     border-color: rgb(0, 0, 0);
     background-color: rgb(42, 42, 42);
@@ -15,13 +8,13 @@
   }
   
   /* Clear floats */
-  .container::after {
+  /* .container::after {
     content: "";
     clear: both;
     display: table;
   }
   
-  /* Style images */
+/*
   .container img {
     float: left;
     max-width: 60px;
@@ -29,15 +22,44 @@
     margin-right: 20px;
     border-radius: 50%;
   }
-  
-  /* Style time text */
+/*   
+  /* 
   .time-right {
     float: right;
     color: #aaa;
-  }
+  }*/
+ 
+  /* .button {
+    position: relative;
+    background-color: #4CAF50;
+    border: none;
+    font-size: 28px;
+    color: #FFFFFF;
+    padding: 20px;
+    width: 200px;
+    text-align: center;
+    transition-duration: 0.4s;
+    text-decoration: none;
+    overflow: hidden;
+    cursor: pointer;
+  } */
   
-  /* Style time text */
-  .time-left {
-    float: left;
-    color: #999;
+  /* .button:after {
+    content: "";
+    background: #f1f1f1;
+    display: block;
+    position: absolute;
+    padding-top: 300%;
+    padding-left: 350%;
+    margin-left: -20px !important;
+    margin-top: -120%;
+    opacity: 0;
+    transition: all 0.8s
+  } */
+  /*
+  .button:active:after {
+    padding: 0;
+    margin: 0;
+    opacity: 1;
+    transition: 0s
   }

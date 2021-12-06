@@ -1,34 +1,37 @@
 <!DOCTYPE html>
-<html lang="de">
+<html>
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link type="text/css" rel="stylesheet" href="style.css" />
     <title>Chat</title>
-    <script src="https://cdn.socket.io/4.3.0/socket.io.js"></script>
-    <script defer src="index.js"></script>
-    <script>
-        //Verbindung zum WebSocket-Server:
-        let socket = io("http://127.0.0.1:80");  
-    </script>
+    <link rel="stylesheet" href="style.css">
   </head>
   <body>
-    <div class="container">
-        <img src="user.jpg" alt="Avatar" style="float: left;"> 
-        <p>Hi!</p>
-        <span class="time-right">14:00</span>
-      </div>
-      
-      <div class="container darker">
-        <img src="user.jpg" alt="Avatar" style="float: left;">
-        <p>Hi</p>
-        <span class="time-left">14:25</span>
-      </div>
+    <ul id="messages"></ul>
+    <form id="form" action="">
+      <input id="input" autocomplete="off" /><button>Send</button>
+    </form>
+    <script src="/socket.io/socket.io.js"></script>
 
-      <ul></ul>
+    <script>
+      var socket = io();
 
-      <input placeholder="message">
-      <button type="button">Senden</button>
+      var messages = document.getElementById('messages');
+      var form = document.getElementById('form');
+      var input = document.getElementById('input');
 
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        if (input.value) {
+          socket.emit('chat message', input.value);
+          input.value = '';
+        }
+      });
+
+      socket.on('chat message', function(msg) {
+        var item = document.createElement('li');
+        item.textContent = msg;
+        messages.appendChild(item);
+        window.scrollTo(0, document.body.scrollHeight);
+      });
+    </script>
   </body>
 </html>
