@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Titel</title>
+    <!-- Socket.io einbinden -->
+    <script src="https://cdn.socket.io/4.3.0/socket.io.js"></script>
+    <script>
+        // Verbindung zum WebSocket-Server:
+        let socket = io("http://127.0.0.1:80");
+        //
+        function submitUserName() {
+            var userName = document.getElementById("username").value;
+            console.log ("Username" + userName);
+            socket.emit( "submittingUserName", userName );
+        }
+
+        socket.on("welcome", function(htmlData) {
+         document.body.innerHTML = htmlData;   
+        });
+
+        socket.on("updateUser", function(usernames) {
+            //
+            document.getElementById("userNames").innerHTML = "You can chat with " + usernames;
+        });
+
+    </script>
+  </head>
+  <body>
+<form>
+    <label for="username">User name:</label>
+    <input type="text" id="username" name="username">
+    <input type="button" value="Submit" onclick="submitUserName()"> 
+</form>
+  </body>
+</html>

@@ -1,19 +1,21 @@
-const socket = io('ws://localhost:8080');
+const app = require('express')();
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
+const port = process.env.PORT || 80;
 
-socket.on('message', text => {
-
-    const li = document.createElement('li');
-    li.innerHTML = text;
-    document.querySelector('ul').appendChild(el)
-
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/index.html');
 });
 
-document.querySelector('button').onclick = () => {
+io.on('connection', (socket) => {
+  socket.on('chat message', msg => {
+    io.emit('chat message', msg);
+  });
+});
 
-    const text = document.querySelector('input').value;
-    socket.emit('message', text)
-    
-}
+http.listen(port, () => {
+  console.log(`Socket.IO server running at http://localhost:${port}/`);
+});
 
 // class for sender
 class user {
@@ -65,25 +67,25 @@ class chat extends message {
     this.history = history;
     this.chatID = chatID;
   }
+
   //create chat
-  putChat() {
+  getChat() {
     return this.getInput() + this.history + this.chatID;
   }
 }
 
 
 // class for Two Person Chat
-class twoPersonChat extends chat, user {
+class twoPersonChat extends chat {
   constructor(firstName, lastName, profilpicture, userID, input, time, history, chatID, status) {
     super(firstName, lastName, profilpicture, userID,input, time, history, chatID);
     this.status = status;
   }
   //create twoPersonChat
-  puttwoPersonChat (){
+  gettwoPersonChat (){
 return this.getDetails() + this.getChat() + this.status;
   }
 }
-
 
 // class for Groupchat
 class groupChat extends chat {
@@ -93,7 +95,7 @@ class groupChat extends chat {
     this.groupImage = groupImage;
   }
   //create groupChat 
-  putgroupChat(){
+  getgroupChat(){
    return this.getChat() + this.groupName + this.groupImage
   }
 }
