@@ -4,7 +4,9 @@
   "description": "my first socket.io app",
   "dependencies": {
     "express": "^4.17.1",
-    "socket.io": "^4.1.2"
+    "socket.io": "^4.1.2",
+    "vue": "^2.6.14",
+    "vue.js": "^0.3.2"
   },
   "scripts": {
     "start": "node index.js"

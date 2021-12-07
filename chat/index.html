@@ -7,11 +7,23 @@
   <body>
     <ul id="messages"></ul>
     <form id="form" action="">
-      <input id="input" /><button>Send</button>
+      <input id="input"/><button>Send</button>
     </form>
+    <div id="app">
+      {{greeting}}
+    </div>
     <script src="/socket.io/socket.io.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
 
     <script>
+     let app = vue.createApp({
+       data: function(){
+         return{
+           greeting: 'Hello'
+         }
+       }
+     })
+     app.mount('#app')
       var socket = io();
 
       var messages = document.getElementById('messages');
@@ -32,6 +44,76 @@
         messages.appendChild(item);
         window.scrollTo(0, document.body.scrollHeight);
       });
+
+// class for sender
+class user {
+  constructor(firstName, lastName, profilpicture, userID) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.profilpicture = profilpicture;
+    this.userID = userID;
+  }
+  getDetails() {
+    return this.profilpicture + " " + this.userID + " " + this.firstName + " " + this.lastName;
+  }
+}
+// class for message
+class message {
+  constructor(input, time) {
+    super(firstName,lastName);
+    this.input = input;
+    this.time = time;
+  }
+  
+  // Function for the time stamp
+  getTime() {
+    let today = new Date();
+    hours = today.getHours();
+    minutes = today.getMinutes();
+
+    if (hours < 10) {
+      hours = "0" + hours;
+    }
+
+    if (minutes < 10) {
+      minutes = "0" + minutes;
+    }
+    let time = hours + ":" + minutes;
+    return time;
+  }
+
+  //Function for message input
+  getInput() {
+    return this.firstName + this.lastName + this.getTime() + this.input;
+  }
+}
+
+//class for chat
+class chat {
+  constructor(history, chatID) {
+    this.history = history;
+    this.chatID = chatID;
+  }
+
+  //create chat
+  getChat() {
+    return this.getInput() + this.history + this.chatID;
+  }
+}
+
+
+// class for Groupchat
+class groupChat extends chat {
+  constructor(input, time, history, chatID, groupName, groupImage){
+    super(input, time, history, chatID)
+    this.groupName = groupName;
+    this.groupImage = groupImage;
+  }
+  //create groupChat 
+  getgroupChat(){
+   return this.getChat() + this.groupName + this.groupImage
+  }
+}
     </script>
   </body>
 </html>
