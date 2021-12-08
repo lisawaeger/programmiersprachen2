@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link type="text/css" rel="stylesheet" href="style.css" />
+    <title>Chat</title>
+    <script src="https://cdn.socket.io/socket.io-3.0.0.js"></script>
+    <script defer src="app.js"></script>
+  </head>
+  <body>
+    <div class="container">
+        <img src="user.jpg" alt="Avatar">
+        <p>Hi!</p>
+        <span class="time-right">14:00</span>
+      </div>
+      
+      <div class="container darker">
+        <img src="user.jpg" alt="Avatar" class="right">
+        <p>Hey!</p>
+        <span class="time-left">14:05</span>
+      </div>
+      
+      <div class="container">
+        <img src="user.jpg" alt="Avatar">
+        <p>Wie gehts?</p>
+        <span class="time-right">14:12</span>
+      </div>
+      
+      <div class="container darker">
+        <img src="user.jpg" alt="Avatar" class="right">
+        <p>Gut und dir?</p>
+        <span class="time-left">14:25</span>
+        
+      </div>
+
+      <input id="userInput" name="userInput">
+      <input placeholder="message">
+
+  </body>
+</html>
