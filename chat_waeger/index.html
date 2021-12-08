@@ -16,13 +16,13 @@
     <div v-if="state == 1"> 
    <ul id="chatbox">
      <li v-for="message in messages">
-      <b>{{ message.user }}:</b> {{ message }}
+      <b>{{ message.user }}:</b> {{ message.message }}
      </li>
    </ul>
 <!--  Verhindert das eine neue Seite geladen wird -->
     <form @submit.prevent="sendMessage">
 <input type="text" placeholder="Message" v-model:value="message"/>
-<input type="submit" value="Send"/>
+<input type="submit" value="Send"/> 
     </form>
     </div>
     </div>
