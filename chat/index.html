@@ -2,50 +2,75 @@
 <html>
   <head>
     <title>Chat</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../style/style.css">
   </head>
   <body>
-    <ul id="messages"></ul>
-    <form id="form" action="">
-      <input id="input"/><button>Send</button>
+  <div id="app"> 
+    <div v-if= "state == 0">
+    <h3>Willkommen! Bitte gib einen username an!</h3>
+    <form @submit.prevent="setUsername">
+      <input type="text" placeholder="Username" v-model:value="username"/>
+      <input type="submit" value="join"/>
     </form>
-    <div id="app">
-      {{greeting}}
+    </div>
+    <div v-if="state == 1"> 
+   <ul id="chatbox">
+     <li v-for="message in messages">
+      <b>{{ message.user }}:</b> {{ message }}
+     </li>
+   </ul>
+<!--  Verhindert das eine neue Seite geladen wird -->
+    <form @submit.prevent="sendMessage">
+<input type="text" placeholder="Message" v-model:value="message"/>
+<input type="submit" value="Send"/>
+    </form>
+    </div>
     </div>
     <script src="/socket.io/socket.io.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script>
+  
+      var socket = null;
 
-    <script>
-     let app = vue.createApp({
-       data: function(){
-         return{
-           greeting: 'Hello'
-         }
-       }
-     })
-     app.mount('#app')
-      var socket = io();
+     var app = new Vue({
+            // State 0: Username aussuchen
+      // State 1: chatten
+    el: '#app',
+    data:{
+messages:[], 
+message: '',
+username:'',
+state: 0
+    },
+    methods:{
+    sendMessage: function() {
+      socket.emit('message', this.message);
+      this.message = '';
+    },
+    setUsername: function(){
+      socket.emit('join', this.username);
+      this.username = '';
+      this.state = 1;
+    }
+  },
+  created: function(){
+    socket = io();
+  },
+  mounted: function(){
+    socket.on('message', function(message){
+      //Pusht den Input von message in das Array messages
+      app.messages.push(message);
+      // this needs to be done AFTER vue updates the page!!
+      app.$nextTick(function () {
+            var messageBox = document.getElementById('chatbox');
+            messageBox.scrollTop = messageBox.scrollHeight;
+          });
+    })
+  }
+});
 
-      var messages = document.getElementById('messages');
-      var form = document.getElementById('form');
-      var input = document.getElementById('input');
 
-      form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        if (input.value) {
-          socket.emit('chat message', input.value);
-          input.value = '';
-        }
-      });
-
-      socket.on('chat message', function(msg) {
-        var item = document.createElement('li');
-        item.textContent = msg;
-        messages.appendChild(item);
-        window.scrollTo(0, document.body.scrollHeight);
-      });
-
-// class for sender
+/* // class for sender
 class user {
   constructor(firstName, lastName, profilpicture, userID) {
     this.firstName = firstName;
@@ -113,7 +138,7 @@ class groupChat extends chat {
   getgroupChat(){
    return this.getChat() + this.groupName + this.groupImage
   }
-}
+} */
     </script>
   </body>
 </html>
