@@ -1,5 +1,4 @@
 {
-<<<<<<< HEAD
   "name": "chat",
   "version": "0.0.1",
   "description": "chat",
@@ -8,14 +7,6 @@
     "socket.io": "^4.1.2",
     "vue": "^2.6.14",
     "vue.js": "^0.3.2"
-=======
-  "name": "socket-chat-example",
-  "version": "0.0.1",
-  "description": "my first socket.io app",
-  "dependencies": {
-    "express": "^4.17.1",
-    "socket.io": "^4.1.2"
->>>>>>> 293dfb8505915f8f5ba1878d2b1452d1209310db
   },
   "scripts": {
     "start": "node index.js"
