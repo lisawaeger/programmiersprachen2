@@ -1,3 +1,7 @@
+body{
+  font-family: sans-serif;
+}
+
 #chatbox{
     height:200px;
     max-width: 400px;

@@ -2,24 +2,29 @@
 <html>
   <head>
     <title>Chat</title>
-    <link rel="stylesheet" href="../style/style.css">
+    <link rel="stylesheet" href="style/style.css">
   </head>
   <body>
-  <div id="app"> 
+  <div id="app">
+    <!--state 0 ist für die Angabe des username-->
     <div v-if= "state == 0">
     <h3>Willkommen! Bitte gib einen username an!</h3>
+    <!--  submit.prevent verhindert das eine neue Seite geladen wird -->
     <form @submit.prevent="setUsername">
+      <!-- input feld fuer username v-model:value aktualisiert immer den eingegebenen username-->
       <input type="text" placeholder="Username" v-model:value="username"/>
       <input type="submit" value="join"/>
     </form>
     </div>
+        <!--state 1 ist für den Chat-->
     <div v-if="state == 1"> 
+      <!--Styling für chatbox funkioniert noch nicht!-->
    <ul id="chatbox">
      <li v-for="message in messages">
       <b>{{ message.user }}:</b> {{ message.message }}
      </li>
    </ul>
-<!--  Verhindert das eine neue Seite geladen wird -->
+<!--  submit.prevent verhindert das eine neue Seite geladen wird -->
     <form @submit.prevent="sendMessage">
 <input type="text" placeholder="Message" v-model:value="message"/>
 <input type="submit" value="Send"/> 
