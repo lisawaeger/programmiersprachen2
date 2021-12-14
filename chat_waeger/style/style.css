@@ -5,5 +5,7 @@ body{
 #chatbox{
     height:200px;
     max-width: 400px;
-    scroll-behavior: auto;
+    overflow: scroll;
   }
+
+li{ list-style-type: none;}

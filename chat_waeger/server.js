@@ -9,16 +9,21 @@ app.get('/', (req, res) => {
 app.use('/style', express.static(__dirname+'/style'))
 
 io.on('connection', (socket) => {
-  socket.username = 'anonymous';
+  socket.username = 'anonym';
   socket.on('change username', (name) => socket.username = name)
   socket.on('message', (msg) => io.emit('message',
   { 'user': socket.username, 'message': msg }))
+
   socket.on('join', (username) => {
     if (username != null) {
-      socket.username = username
+      socket.username = username 
+      io.emit ('message',
+   {'user': 'Server', 'message': 'Willkommen ' + socket.username + '!'
+  })
     }
+ 
     socket.broadcast.emit('message',
-    { 'user': 'Server', 'message': socket.username + ' has joined!'})
+    { 'user': 'Server', 'message': socket.username + ' ist beigetreten!'})
   })
 })
 

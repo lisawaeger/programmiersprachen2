@@ -79,49 +79,26 @@
         })
       }
     });
-
-
-    /* // class for sender
+  /*
+    // class for user
     class user {
       constructor(username, profilpicture, userID) {
         this.username
         this.profilpicture = profilpicture;
         this.userID = userID;
       }
-      getDetails() {
-        return this.profilpicture + " " + this.userID + " " + this.firstName + " " + this.lastName;
-      }
     }
+
     // class for message
-    class message {
-      constructor(input, time) {
-        super(firstName,lastName);
-        this.input = input;
+    class nachricht {
+      constructor(message, time) {
+        super(username);
+        this.message = message;
         this.time = time;
       }
-      
-      // Function for the time stamp
-      getTime() {
-        let today = new Date();
-        hours = today.getHours();
-        minutes = today.getMinutes();
-
-        if (hours < 10) {
-          hours = "0" + hours;
-        }
-
-        if (minutes < 10) {
-          minutes = "0" + minutes;
-        }
-        let time = hours + ":" + minutes;
-        return time;
-      }
-
-      //Function for message input
-      getInput() {
-        return this.firstName + this.lastName + this.getTime() + this.input;
-      }
+  
     }
+
 
     //class for chat
     class chat {
@@ -129,27 +106,18 @@
         this.history = history;
         this.chatID = chatID;
       }
-
-      //create chat
-      getChat() {
-        return this.getInput() + this.history + this.chatID;
-      }
     }
 
 
     // class for Groupchat
     class groupChat extends chat {
-      constructor(input, time, history, chatID, groupName, groupImage){
+      constructor(message, time, history, chatID, groupName, groupImage){
         super(input, time, history, chatID)
         this.groupName = groupName;
         this.groupImage = groupImage;
       }
-      //create groupChat 
-      getgroupChat(){
-       return this.getChat() + this.groupName + this.groupImage
-      }
-    } */
+    } 
+  */
   </script>
 </body>
-
 </html>
