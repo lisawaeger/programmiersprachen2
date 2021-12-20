@@ -1,0 +1,11 @@
+body{
+  font-family: sans-serif;
+}
+
+#chatbox{
+    height:200px;
+    max-width: 400px;
+    overflow: scroll;
+  }
+
+li{ list-style-type: none;}
