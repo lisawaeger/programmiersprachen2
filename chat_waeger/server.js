@@ -30,7 +30,7 @@ class user {
   constructor(username, socketId, onlinestatus){
     this.username = username;
     this.socket = socketId;
-    this.status = status
+    this.onlinestatus = onlinestatus
   }
   getUsername() {
     return this.username
@@ -78,6 +78,13 @@ io.on('connection', (socket) => {
     )
   })
 })
+
+http.listen(port, () => {
+  console.log(`Socket.IO server running at http://localhost:${port}/`);
+});
+
+
+
 
 
 /* 
@@ -133,7 +140,4 @@ socket.on("join room",(roomName, cb)=>{
   })
 }); */
 
-http.listen(port, () => {
-  console.log(`Socket.IO server running at http://localhost:${port}/`);
-});
 
