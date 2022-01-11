@@ -22,8 +22,6 @@ const getSocketbyUserId = (name) =>{
   return socket;
 }
 
-
-const status = ["online", "offline"]
 let onlinestatus = true;
 const connectedUsers = [];
 const users = [];
@@ -72,9 +70,12 @@ io.on('connection', (socket) => {
     socket.broadcast.emit('message',
     { 'user': 'Server', 'message': socket.username + ' ist beigetreten!'})
   })
+  //wenn ein user die seite verlässt
   socket.on("disconnect", () => {
     this.onlinestatus == false;
     users = users.filter(this.onlinestatus == false);
+    io.emit('message', 'Ein User hat den Chat verlassen'
+    )
   })
 })
 
