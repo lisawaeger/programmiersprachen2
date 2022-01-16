@@ -11,28 +11,53 @@
     <!--state 0 ist für die Angabe des username-->
     <div v-if="state == 0">
       <h3>Willkommen! Bitte gib einen username an!</h3>
+
       <!--  submit.prevent verhindert das eine neue Seite geladen wird -->
       <form @submit.prevent="setUsername">
+
         <!-- input feld fuer username v-model:value aktualisiert immer den eingegebenen username-->
         <input type="text" placeholder="Username" v-model:value="username" />
         <input type="submit" value="join" />
       </form>
     </div>
-    <!--state 1 ist für den Chat-->
+
+    <!--state 2 ist für den Chat-->
     <div v-if="state == 1">
-      <!--Scrollverhalten für chatbox über id festlegen-->
-      <ul id="chatbox">
-        <li v-for="message in messages">
-          <!--gibt jeweils immer den input von username uns message aus -->
-          <b>{{ message.user }}:</b> {{ message.message }}
-        </li>
-      </ul>
-      <!--  submit.prevent verhindert das eine neue Seite geladen wird -->
-      <form @submit.prevent="sendMessage">
-        <!-- input feld fuer message v-model:value aktualisiert immer den eingegebenen text-->
-        <input type="text" placeholder="Message" v-model:value="message" />
-        <input type="submit" value="Send" />
-      </form>
+
+      <!--Überschrift um den Name des Raums anzuzeigen-->
+      <div class='wrap'>
+        <label for="room">Room</label>
+        <select name="room" id="room">
+          <option id='spalte1' value="general" v-model:value="general">General</option>
+          <option id='spalte2' value="Iot2">Iot2</option>
+          <option id='spalte3' value="room1">room1</option>
+          <!-- <option value="room2">{{room.username}}</option>
+          <option value="room3">{{room.username}}</option>
+          <option value="room4">{{room.username}}</option> -->
+        </select>
+        <button type="submit" value='joinRoom'>Join Room</button>
+      </div>
+
+
+      <div id='chat'>
+
+        <!--Scrollverhalten für chatbox über id festlegen-->
+        <ul id="chatbox">
+          <h1>{{roomName}}</h1>
+          <li v-for="message in messages">
+
+            <!--gibt jeweils immer den input von username uns message aus -->
+            <b>{{ message.user }}:</b> {{ message.message }}
+          </li>
+        </ul>
+        <!--  submit.prevent verhindert das eine neue Seite geladen wird -->
+        <form @submit.prevent="sendMessage">
+
+          <!-- input feld fuer message v-model:value aktualisiert immer den eingegebenen text-->
+          <input type="text" placeholder="Message" v-model:value="message" />
+          <input type="submit" value="Send" />
+        </form>
+      </div>
     </div>
   </div>
   <script src="/socket.io/socket.io.js"></script>
@@ -42,35 +67,51 @@
 
     var app = new Vue({
       // State 0: Username aussuchen
-      // State 1: chatten
+      // State 1: Raumauswahl
+      //State 2: chatten
       el: '#app',
       data: {
         messages: [],
         message: '',
+        roomName: '',
         username: '',
         state: 0
       },
       methods: {
+
         //funktion um die eingegebene Nachricht an vue weiterzugeben und anzuzeigen
         sendMessage: function () {
           socket.emit('message', this.message);
           this.message = '';
         },
+
         //funktion um den eingegebenen Username an vue weiterzugeben und anzuzeigen
         setUsername: function () {
           socket.emit('join', this.username);
           this.username = '';
           this.state = 1;
+        },
+
+        //funktion um Raum auszuwählen
+        setRoom: function () {
+          socket.emit('joinRoom', this.roomname);
+          this.roomname
+          this.state = 1;
         }
       },
+
       created: function () {
         socket = io();
       },
+
       mounted: function () {
+
         //socket hört auf message
         socket.on('message', function (message) {
+
           //Pusht den Input von message in das Array messages
           app.messages.push(message);
+
           // soll immer an das Ende scrollen um die neuste nachricht anzuzeigen
           app.$nextTick(function () {
             var messageBox = document.getElementById('chatbox');
@@ -79,45 +120,7 @@
         })
       }
     });
-  /*
-    // class for user
-    class user {
-      constructor(username, profilpicture, userID) {
-        this.username
-        this.profilpicture = profilpicture;
-        this.userID = userID;
-      }
-    }
-
-    // class for message
-    class nachricht {
-      constructor(message, time) {
-        super(username);
-        this.message = message;
-        this.time = time;
-      }
-  
-    }
-
-
-    //class for chat
-    class chat {
-      constructor(history, chatID) {
-        this.history = history;
-        this.chatID = chatID;
-      }
-    }
-
-
-    // class for Groupchat
-    class groupChat extends chat {
-      constructor(message, time, history, chatID, groupName, groupImage){
-        super(input, time, history, chatID)
-        this.groupName = groupName;
-        this.groupImage = groupImage;
-      }
-    } 
-  */
   </script>
 </body>
+
 </html>
