@@ -51,7 +51,7 @@ class User {
 }
 
 io.on('connection', (socket) => {
-  
+
   //username anfangs anonym falls jemand keinen namen angibt
   socket.username = 'anonym';
 
@@ -109,7 +109,7 @@ io.on('connection', (socket) => {
     console.log('user disconnected');
     io.emit('message', {
       'user': 'Server',
-      message: socket.username + ' hat den ' + socket.roomName + ' verlassen'
+      message: socket.username + ' hat ' + socket.roomName + ' verlassen'
     })
   });
 
@@ -140,59 +140,3 @@ http.listen(port, () => {
   console.log(`Socket.IO server running at http://localhost:${port}/`);
 });
 
-
-
-
-
-/* 
-
-let users = [];
-
-    // class for Groupchat
-    class rooms {
-      constructor(general, random){
-      this.general = general;
-      this.random = random
-      };
-    } 
-
-    io.on('connection', (socket) => { socket.on("join server",(username)=> {
-  const user = {
-    username,
-    id: socket.id,
-  };
-  users.push(user);
-  io.emit("new user", users);
-});
-socket.on("join room",(roomName, cb)=>{
-  socket.join(roomName);
-  cb(messages[roomName]);
-  });
-
-  socket.on("send message", ({content, to, username, chatName, Channel})=>{
-    if (Channel) {
-      const history = {
-        content,
-        chatName,
-        username,
-      };
-      socket.to(to).emit("new message",history);
-    } else {
-        const history = {
-          content, 
-          chatName: username,
-          username
-        };
-        socket.to(to).emit("new message", history)
-      };
-      if(messages[chatName]) {
-        messages[chatName].push({
-          username,
-          content
-        })
-      }
-  });
-  socket.on("disconnect", () => {
-    users = users.filter(u => u.id !== socket.id);
-  })
-}); */
