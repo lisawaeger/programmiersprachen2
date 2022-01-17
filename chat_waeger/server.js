@@ -45,10 +45,8 @@ io.on('connection', (socket) => {
   socket.username = 'anonym';
 
   //socketid
-  socket.userId = '';
-
-  //userId erstellen
   let userId = '';
+
 
   //Raum erstellen
   let roomName = 'general';
@@ -62,6 +60,9 @@ io.on('connection', (socket) => {
   //es wird eine userId vergeben
   socket.on('set socket.id', (userId) => socket.id = userId);
 
+    //warum gibt es keine socket ID aus wenn ich Variable userId benutze????
+  console.log('ID: '+ socket.id)
+
   //wenn user eine nachricht schreibt wird sie so weitergegeben username: message
   socket.on('message', (msg) => io.emit('message', {
     'user': socket.username,
@@ -72,11 +73,10 @@ io.on('connection', (socket) => {
     if (username != null) {
       socket.username = username;
       socket.onlinestatus = onlinestatus;
-      socket.id = userId;
-      socket.roomName = roomName;
+      socket.userId = userId;
 
       //Willkommensnachricht !Problem soll nur bei user1 angezeigt werden!
-      io.to(userId).emit('message', {
+      io.to('user').emit('message', {
         'user': 'Server',
         'message': 'Willkommen ' + socket.username + '!'
       })
@@ -87,8 +87,7 @@ io.on('connection', (socket) => {
       'message': socket.username + ' ist ' + socket.roomName + ' beigetreten!'
     })
 
-  //warum gibt es keine socket ID aus wenn ich userId benutze????
-  console.log('ID: '+ socket.id)
+
 
   //neuer user wird erstellt
   let newUser = new User(socket.username, socket.userId, socket.onlinestatus);
