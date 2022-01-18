@@ -16,108 +16,143 @@ app.get('/', (req, res) => {
 app.use('/style', express.static(__dirname + '/style'))
 
 let onlinestatus = true;
-const users = [];
-const rooms = {
-  general: [],
-  Iot2: [],
-}
+let users = [];
+let rooms = [];
+
+
 
 class User {
-  constructor(username, userId, onlinestatus) {
+  constructor(username, onlinestatus, socketId) {
     this.username = username;
-    this.userId = userId;
-    this.onlinestatus = onlinestatus
+    this.onlinestatus = onlinestatus;
+    this.socketId = socketId;
   }
   getUsername() {
     return this.username
   }
-  getSocketId() {
-    return this.userId
-  }
   setStatus() {
     return this.onlinestatus
   }
+  getSocketId() {
+    return this.socketId
+  }
+
+  setUsername(username) {
+    this.username = username
+  }
 }
+
+class Room {
+  constructor(roomname) {
+    this.roomname = roomname;
+    this.socketIds = [];
+  }
+  getRoomname() {
+    return this.roomname
+  }
+  getSocketIds() {
+    return this.socketIds
+  }
+  addSocketId(socketId) {
+    this.socketIds.push(socketId)
+  }
+}
+
+
+rooms.push(new Room("general"))
 
 io.on('connection', (socket) => {
 
   //username anfangs anonym falls jemand keinen namen angibt
-  socket.username = 'anonym';
+  // socket.username = 'anonym';
 
   //socketid
-  let userId = '';
+  // let userId = '';
 
 
   //Raum erstellen
-  let roomName = 'general';
+  // let roomName = 'general';
 
   // user ist online
   socket.onlinestatus = true;
 
-  //username wird bei Eingabe eines Namens überschrieben
-  socket.on('change username', (name) => socket.username = name);
+  //neuer user wird erstellt
+  let newUser = new User('anonym', socket.onlinestatus, socket.id);
+
+  //user in array gepusht
+  users.push(newUser);
+
+  rooms.find(room => room.getRoomname() === "general").addSocketId(socket.id);
+
+      // Klasse ausgeben
+
 
   //es wird eine userId vergeben
-  socket.on('set socket.id', (userId) => socket.id = userId);
+  // socket.on('set socket.id', (userId) => socket.id = userId);
 
     //warum gibt es keine socket ID aus wenn ich Variable userId benutze????
   console.log('ID: '+ socket.id)
 
   //wenn user eine nachricht schreibt wird sie so weitergegeben username: message
-  socket.on('message', (msg) => io.emit('message', {
-    'user': socket.username,
-    'message': msg
-  }))
+  socket.on('message', (msg) => {
+    console.log(msg);
+    const thisRoomsSocketIds = rooms.find(room => room.getRoomname() === msg.roomName).getSocketIds();
+    
+    for (let x = 0; x < thisRoomsSocketIds.length; x++) {
+      io.to(thisRoomsSocketIds[x]).emit('message', {
+        'user': newUser.getUsername(),
+        'message': msg.text
+      });
+    }
+  })
 
   socket.on('join', (username) => {
     if (username != null) {
-      socket.username = username;
-      socket.onlinestatus = onlinestatus;
-      socket.userId = userId;
+      //socket.username = username;
+      //socket.onlinestatus = onlinestatus;
+      //socket.userId = userId;
+      //socket.roomName = roomName;
 
+      newUser.setUsername(username)
+      
       //Willkommensnachricht !Problem soll nur bei user1 angezeigt werden!
-      io.to('user').emit('message', {
+      socket.emit('message', {
+        'room': 'general',
         'user': 'Server',
-        'message': 'Willkommen ' + socket.username + '!'
+        'message': 'Willkommen ' + username + '!'
       })
+
     };
     //anderen usern wird angezeigt wenn jemand dem chat beitritt
     socket.broadcast.emit('message', {
+      'room': 'general', 
       'user': 'Server',
-      'message': socket.username + ' ist ' + socket.roomName + ' beigetreten!'
+      'message': username + ' ist ' + 'general' + ' beigetreten!'
     })
-
-
-
-  //neuer user wird erstellt
-  let newUser = new User(socket.username, socket.userId, socket.onlinestatus);
-
-  //user in array gepusht
-  users.push(newUser);
-
-      // Klasse ausgeben
-  console.log(newUser)
+    console.log(newUser)
   });
+
+  socket.on('joinRoom', (roomName) => {
+    if (rooms.find(room => room.getRoomname() === roomName) !== undefined) {
+      rooms.find(room => room.getRoomname() === roomName).addSocketId(socket.id);
+    } else {
+      rooms.find(room => room.getRoomname() === roomName) = new Room(roomName);
+      rooms.find(room => room.getRoomname() === roomName).addSocketId(socket.id);
+    }
+    socket.emit('joinedRoom', roomName);
+  })
+  
 
   //wenn ein user die seite verlässt
   socket.on("disconnect", () => {
     console.log('user disconnected');
     io.emit('message', {
+      'room': 'general',
       'user': 'Server',
-      message: socket.username + ' hat ' + socket.roomName + ' verlassen'
+      message: newUser.getUsername() + ' hat ' + 'den Chat' + ' verlassen'
     })
   });
-
-  //
-  socket.on('private message', (message) => {
-    const privatMessage = {
-      type: 'message',
-      userId: userId,
-      username: username,
-      message
-    };
-  })
-})
+});
 
 
 /*

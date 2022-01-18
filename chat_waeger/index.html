@@ -21,21 +21,20 @@
       </form>
     </div>
 
-    <!--state 2 ist für den Chat-->
+    <!--state 1 ist für den Chat-->
     <div v-if="state == 1">
 
       <!--Überschrift um den Name des Raums anzuzeigen-->
       <div class='wrap'>
         <label for="room">Room</label>
         <select name="room" id="room">
-          <option id='spalte1' value="general" v-model:value="general">General</option>
-          <option id='spalte2' value="Iot2">Iot2</option>
-          <option id='spalte3' value="room1">room1</option>
+          <option id='spalte1' v-on:click="setRoom('general')" value="general" v-model:value="general">General</option>
+          <option id='spalte2' v-on:click="setRoom('Iot2')" value="Iot2">Iot2</option>
+          <option id='spalte3' v-on:click="setRoom('room1')" value="room1">room1</option>
           <!-- <option value="room2">{{room.username}}</option>
           <option value="room3">{{room.username}}</option>
           <option value="room4">{{room.username}}</option> -->
         </select>
-        <button type="submit" value='joinRoom'>Join Room</button>
       </div>
 
 
@@ -75,13 +74,25 @@
         message: '',
         roomName: '',
         username: '',
-        state: 0
+        state: 0,
+
+        rooms: [
+          {
+            roomName: "general",
+            messages: []
+          },
+          {
+            roomName: "Iot2",
+            messages: []
+          }
+        ]
       },
       methods: {
 
         //funktion um die eingegebene Nachricht an vue weiterzugeben und anzuzeigen
         sendMessage: function () {
-          socket.emit('message', this.message);
+          console.log(this.roomName);
+          socket.emit('message', {roomName: app.roomName, text: this.message});
           this.message = '';
         },
 
@@ -90,13 +101,20 @@
           socket.emit('join', this.username);
           this.username = '';
           this.state = 1;
+
+          this.roomName = "general";
         },
 
         //funktion um Raum auszuwählen
-        setRoom: function () {
-          socket.emit('joinRoom', this.roomname);
-          this.roomname
+        joinRoom: function () {
+          socket.emit('joinRoom', this.roomName);
+          this.roomName
           this.state = 1;
+        },
+
+        setRoom: function (roomname) {
+          app.roomName = roomname;
+          app.messages = rooms.find(room => room.roomName = roomname).messages
         }
       },
 
@@ -110,6 +128,7 @@
         socket.on('message', function (message) {
 
           //Pusht den Input von message in das Array messages
+          //app.rooms[message.room].messages.push(message);
           app.messages.push(message);
 
           // soll immer an das Ende scrollen um die neuste nachricht anzuzeigen
@@ -117,6 +136,11 @@
             var messageBox = document.getElementById('chatbox');
             messageBox.scrollTop = messageBox.scrollHeight;
           });
+        })
+
+        socket.on('joinedRoom', (roomname) => {
+          rooms.find(room => room.roomName = roomname).messages = [];
+          setRoom(roomname);
         })
       }
     });
